@@ -8,7 +8,7 @@ redis:
   password: "123456"
   db: "1"
 mq:
-  url: "amqp://admin:admin@123456@120.25.239.33/"
+  url: "amqp://admin:admin@123456@120.25.239.33:7072/"
   exchange: "ngp-exchange"
   key: "ngp-key"
   queue: "ngp-queue"
