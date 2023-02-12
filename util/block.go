@@ -31,7 +31,7 @@ func (ba *BlockAnalysis) initClient() {
 		client := ethrpc.New(rpcs[index])
 		if _, err := client.EthBlockNumber(); err != nil {
 			log.Println("节点客户端初始化异常：", err)
-			time.Sleep(3 * time.Second)
+			time.Sleep(12 * time.Second)
 
 			continue
 		} else {
@@ -59,7 +59,7 @@ func (ba *BlockAnalysis) Run() {
 	go func() {
 		for {
 			ba.initClient()
-			time.Sleep(3 * time.Second)
+			time.Sleep(12 * time.Second)
 		}
 	}()
 	select {}
@@ -93,7 +93,7 @@ func (ba *BlockAnalysis) monitorBlock() {
 			for ba.lastheight < ba.blockheight {
 				ba.block <- ba.lastheight
 				ba.lastheight++
-				time.Sleep(1 * time.Millisecond*500)
+				time.Sleep(12 * time.Millisecond*500)
 			}
 
 			go ba.RedisSet("height_bsctest", ba.lastheight, -1)
@@ -101,7 +101,7 @@ func (ba *BlockAnalysis) monitorBlock() {
 
 		newclient := <-ba.client
 		ba.blockheight, _ = newclient.EthBlockNumber()
-		time.Sleep(2 * time.Second)
+		time.Sleep(12 * time.Second)
 	}
 }
 
@@ -116,7 +116,7 @@ func (ba *BlockAnalysis) analysisBlock() {
 					newclient := getClient()
 					if block, e := newclient.EthGetBlockByNumber(blockheight, true); e != nil {
 						log.Println("区块解析失败，打回：", blockheight)
-						time.Sleep(3 * time.Second)
+						time.Sleep(12 * time.Second)
 						continue A
 					} else {
 						if block != nil {
@@ -179,7 +179,7 @@ func (ba *BlockAnalysis) validTransaction(hash string) {
 	for {
 		client := <-ba.client
 		if receipt, e := client.EthGetTransactionReceipt(hash); e != nil {
-			time.Sleep(2 * time.Second)
+			time.Sleep(12 * time.Second)
 			log.Println("e:", e)
 			continue
 		} else {
@@ -187,7 +187,7 @@ func (ba *BlockAnalysis) validTransaction(hash string) {
 				bytes, _ := json.Marshal(receipt.Logs)
 				//推送到消息队列
 				if err := ba.publish(string(bytes)); err != nil {
-					time.Sleep(2 * time.Second)
+					time.Sleep(12 * time.Second)
 					log.Println("err:", err)
 					continue
 				} else {
