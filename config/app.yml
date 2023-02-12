@@ -4,11 +4,11 @@ chain:
   addr:
     - "0x2fAD18285F4192A130752030D07fA39f9923Ad16"
 redis:
-  addr: "120.25.239.33:7069"
+  addr: "127.0.0.1:7069"
   password: "123456"
   db: "1"
 mq:
-  url: "amqp://admin:admin@123456@120.25.239.33:7072/"
+  url: "amqp://admin:admin@123456@127.0.0.1:7072/"
   exchange: "ngp-exchange"
   key: "ngp-key"
   queue: "ngp-queue"
